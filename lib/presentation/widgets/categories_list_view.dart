@@ -13,9 +13,12 @@ class CategoriesListView extends StatelessWidget {
         itemCount: SlashCubit.get(context).categoriesList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
+          return SizedBox(
+            width: 100,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Stack(
                   children: [
@@ -24,22 +27,24 @@ class CategoriesListView extends StatelessWidget {
                       backgroundColor: Colors.black,
                       child: Center(
                         child: Padding(
-                          padding: EdgeInsets.only(
-                              right: 3.5),
+                          padding: const EdgeInsets.only(right: 3.5),
                           child: SlashCubit.get(context).icons[index],
+
                         ),
                       ),
                     ),
                   ],
                 ),
                 Text(
-                  '${CategoriesModel.fromJson(SlashCubit.get(context).categories, index).name.toString()}',
+                  textAlign: TextAlign.center,
+                  CategoriesModel.fromJson(SlashCubit.get(context).categories, index).name.toString(),
                   style: Styles.font14.copyWith(
-                    color: Colors.black,
+textBaseline: TextBaseline.ideographic,
+
+                    color: Colors.black,overflow: TextOverflow.ellipsis
                   ),
-                  maxLines: 2,
-                  softWrap: true,
-                  overflow: TextOverflow.visible,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 )
               ],
             ),

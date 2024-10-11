@@ -1,7 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slash/domain/bloc/states.dart';
 import 'package:slash/domain/network/remote/api_constants.dart';
@@ -12,6 +10,12 @@ class SlashCubit extends Cubit<SlashStates> {
   SlashCubit() : super(SlashInitState());
 
   static SlashCubit get(context) => BlocProvider.of(context);
+  int navBarIndex=0;
+
+void changeNavBarIndex(int index){
+  navBarIndex=index;
+  emit(ChangeNavBarIndexState());
+}
   var banners;
   List bannersList=[];
   void getBanners() async {
@@ -23,6 +27,7 @@ class SlashCubit extends Cubit<SlashStates> {
       emit(SlashGetBannersDoneState());
     }).catchError((error) {
       print(error.runtimeType);
+      print(state);
       print(error.toString());
       emit(SlashGetBannersErrorState(error));
     });
@@ -41,6 +46,8 @@ class SlashCubit extends Cubit<SlashStates> {
     }).catchError((error) {
       print(error.runtimeType);
       print(error.toString());
+      print(state);
+
       emit(SlashGetCategoriesErrorState(error));
     });
   }
@@ -71,6 +78,8 @@ class SlashCubit extends Cubit<SlashStates> {
     }).catchError((error) {
       print(error.runtimeType);
       print(error.toString());
+      print(state);
+
       emit(SlashGetProductsErrorState(error));
     });
   }

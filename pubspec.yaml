@@ -41,6 +41,7 @@ dependencies:
   font_awesome_flutter:
   smooth_page_indicator:
   flutter_feather_icons:
+  device_preview:
 
 dev_dependencies:
   flutter_test:

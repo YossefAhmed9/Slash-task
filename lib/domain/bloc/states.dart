@@ -23,3 +23,5 @@ class SlashGetProductsErrorState extends SlashStates {
   final error;
   SlashGetProductsErrorState(this.error);
 }
+
+class ChangeNavBarIndexState extends SlashStates {}

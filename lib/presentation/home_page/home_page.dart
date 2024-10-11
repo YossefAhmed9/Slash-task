@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slash/data/models/banners_model.dart';
-import 'package:slash/data/models/categories_model.dart';
-import 'package:slash/data/models/product_model.dart';
 import 'package:slash/presentation/widgets/adjust_search.dart';
 import 'package:slash/presentation/widgets/search_bar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -27,23 +23,30 @@ class HomePage extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         final controller = PageController(
-            viewportFraction: 1.1, keepPage: false, initialPage: 5);
+            viewportFraction: 1.1, keepPage: false, initialPage: 5,);
 
         List navbarList=["Home","Favorites","My Cart","Profile"];
         SlashCubit cubit = SlashCubit.get(context);
         return Scaffold(
-          bottomNavigationBar: BottomNavigationBar(items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home_filled,),label: navbarList[0]),
-            BottomNavigationBarItem(icon: Icon(Icons.favorite,),label: navbarList[1]),
-            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_outlined,),label: navbarList[2]),
-            BottomNavigationBarItem(icon: Icon(Icons.person,),label: navbarList[3]),
+          backgroundColor: Colors.white,
+          bottomNavigationBar: BottomNavigationBar(
+            items: [
+            BottomNavigationBarItem(icon: const Icon(Icons.home_filled,),label: navbarList[0],),
+            BottomNavigationBarItem(icon: const Icon(Icons.favorite,),label: navbarList[1]),
+            BottomNavigationBarItem(icon: const Icon(Icons.shopping_cart_outlined,),label: navbarList[2]),
+            BottomNavigationBarItem(icon: const Icon(Icons.person,),label: navbarList[3]),
           ],
-            currentIndex: 0,
+            onTap: (int index){
+              cubit.changeNavBarIndex(index);
+            },
+            currentIndex: cubit.navBarIndex,
             selectedItemColor: Colors.black,
             unselectedItemColor: Colors.grey.shade600,
 
           ),
           appBar: AppBar(
+            scrolledUnderElevation: 0,
+            elevation: 0,
             title: const Text(
               'Slash',
               style: Styles.font20,
@@ -52,13 +55,12 @@ class HomePage extends StatelessWidget {
               IconButton(
                   onPressed: () async {
                     cubit.getBanners();
-                    print(cubit.banners.toString());
                   },
-                  icon: Icon(FontAwesomeIcons.bell))
+                  icon: const Icon(FontAwesomeIcons.bell))
             ],
           ),
-          body: cubit.banners == null
-              ? Center(
+          body: cubit.products  == null
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Padding(
@@ -70,11 +72,11 @@ class HomePage extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Row(
+                            const Row(
                               children: [
                                 Expanded(child: DefaultSearchBar()),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
+                                  padding: EdgeInsets.only(left: 8.0),
                                   child: AdjustSearch(),
                                 )
                               ],
@@ -118,7 +120,7 @@ class HomePage extends StatelessWidget {
                                 ),
                                 Column(
                                   children: [
-                                    Row(
+                                    const Row(
                                       children: [
                                         Text(
                                           'Categories',
@@ -129,17 +131,31 @@ class HomePage extends StatelessWidget {
                                       ],
                                     ),
                                     Container(
-                                      width: double.infinity,
-                                      height:
-                                      MediaQuery.of(context).size.width * 0.25,
-                                      decoration: BoxDecoration(),
-                                      child:CategoriesListView(),
+                                      height: 120,
+                                      decoration: const BoxDecoration(),
+                                      child:const CategoriesListView(),
                                     )
                                   ],
                                 ),
                                 Column(
                                   children: [
-                                    Row(
+                                    const Row(
+                                      children: [
+                                        Text(
+                                          'Best Selling',
+                                          style: Styles.font22,
+                                        ),
+                                        Spacer(),
+                                        SeeMore(),
+                                      ],
+                                    ),
+
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: MediaQuery.of(context).size.height * 0.18,
+                                      child: const ProductsListView(),
+                                    ),
+                                    const Row(
                                       children: [
                                         Text(
                                           'New Arrival',
@@ -149,23 +165,28 @@ class HomePage extends StatelessWidget {
                                         SeeMore(),
                                       ],
                                     ),
-                                    Container(
+
+                                    SizedBox(
                                       width: double.infinity,
-                                      height:
-                                      MediaQuery.of(context).size.height * 0.18,
-                                      child: ProductsListView(),
+                                      height: MediaQuery.of(context).size.height * 0.18,
+                                      child: const ProductsListView(),
                                     ),
-                                    Container(
-                                      width: double.infinity,
-                                      height:
-                                      MediaQuery.of(context).size.height * 0.18,
-                                      child: ProductsListView(),
+                                    const Row(
+                                      children: [
+                                        Text(
+                                          'Recommended for you',
+                                          style: Styles.font22,
+                                        ),
+                                        Spacer(),
+                                        SeeMore(),
+                                      ],
                                     ),
-                                    Container(
+
+                                    SizedBox(
                                       width: double.infinity,
                                       height:
                                       MediaQuery.of(context).size.height * 0.18,
-                                      child: ProductsListView(),
+                                      child: const ProductsListView(),
                                     ),
                                   ],
                                 )
@@ -182,5 +203,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-/*
-* cubit.result==null ? Center(child: CircularProgressIndicator(),) :  */
